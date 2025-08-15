@@ -52,9 +52,8 @@ def build_router(entity: Dict[str, Any], CreateModel, UpdateModel, OutModel) -> 
         if not rec or rec.type != name:
             raise HTTPException(404, "Item not found")
         data = rec.data.copy()
-        for k, v in payload.model_dump(exclude_unset=True).items():
-            if v is not None:
-                data[k] = v
+        for k, v in payload.model_dump(exclude_unset=True, exclude_none=False).items():
+            data[k] = v
         rec.data = data
         db.add(rec); db.commit(); db.refresh(rec)
         return to_out(rec)
