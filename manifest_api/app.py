@@ -12,8 +12,13 @@ def create_app(manifest_path: str) -> FastAPI:
     def health():
         return {"ok": True}
 
-    with open(manifest_path, "r", encoding="utf-8") as f:
-        manifest = ujson.load(f)
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            manifest = ujson.load(f)
+    except FileNotFoundError as e:
+        raise RuntimeError(f"Manifest file not found: {manifest_path}") from e
+    except ValueError as e:
+        raise RuntimeError(f"Failed to decode manifest JSON: {e}") from e
 
     for entity in manifest.get("entities", []):
         CreateModel, UpdateModel, OutModel = make_models(entity)
