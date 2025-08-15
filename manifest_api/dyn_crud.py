@@ -1,7 +1,7 @@
 from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from .db import get_db
 from .models import Record
 
@@ -19,18 +19,15 @@ def build_router(entity: Dict[str, Any], CreateModel, UpdateModel, OutModel) -> 
         q: Optional[str] = Query(None, description="Simple contains search in string/text fields"),
         db: Session = Depends(get_db),
     ):
-        stmt = select(Record).where(Record.type == name).order_by(Record.id.desc()).offset(skip).limit(limit)
-        rows = db.execute(stmt).scalars().all()
+        stmt = select(Record).where(Record.type == name)
 
-        if q:
-            q_lower = q.lower()
-            def match(rec: Record) -> bool:
-                for field in search_fields:
-                    val = str(rec.data.get(field, "")).lower()
-                    if q_lower in val:
-                        return True
-                return False
-            rows = list(filter(match, rows))
+        if q and search_fields:
+            pattern = f"%{q}%"
+            filters = [Record.data[field].as_string().ilike(pattern) for field in search_fields]
+            stmt = stmt.where(or_(*filters))
+
+        stmt = stmt.order_by(Record.id.desc()).offset(skip).limit(limit)
+        rows = db.execute(stmt).scalars().all()
         return [to_out(r) for r in rows]
 
     @router.post("", response_model=OutModel, status_code=status.HTTP_201_CREATED)
