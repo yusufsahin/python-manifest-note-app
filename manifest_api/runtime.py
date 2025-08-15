@@ -15,7 +15,9 @@ TYPE_MAP = {
 def _pydantic_field(f: Dict[str, Any]) -> Tuple[str, tuple]:
     name = f["name"]
     typ = f.get("type", "string")
-    py_type = TYPE_MAP.get(typ, str)
+    if typ not in TYPE_MAP:
+        raise ValueError(f"Unknown field type '{typ}' for field '{name}'")
+    py_type = TYPE_MAP[typ]
 
     required = f.get("required", False)
     default = None if not required else ...
