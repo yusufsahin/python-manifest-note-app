@@ -1,0 +1,2 @@
+[console_scripts]
+manifest-api = manifest_api.cli:main

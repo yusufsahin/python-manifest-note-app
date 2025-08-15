@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "manifest-api"
+version = "0.1.0"
+description = "Low-code manifest-driven CRUD FastAPI server"
+authors = [{ name="Your Name", email="you@example.com" }]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.30",
+    "SQLAlchemy>=2.0",
+    "pydantic>=2.7",
+    "ujson>=5.10",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+postgres = ["psycopg[binary]>=3.1"]
+
+[project.scripts]
+manifest-api = "manifest_api.cli:main"

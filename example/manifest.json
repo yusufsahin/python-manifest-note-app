@@ -1,0 +1,23 @@
+{
+  "entities": [
+    {
+      "name": "note",
+      "plural": "notes",
+      "display": "Note",
+      "fields": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 200
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

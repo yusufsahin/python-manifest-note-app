@@ -1,0 +1,16 @@
+LICENSE
+README.md
+pyproject.toml
+manifest_api/__init__.py
+manifest_api/app.py
+manifest_api/cli.py
+manifest_api/db.py
+manifest_api/dyn_crud.py
+manifest_api/models.py
+manifest_api/runtime.py
+manifest_api.egg-info/PKG-INFO
+manifest_api.egg-info/SOURCES.txt
+manifest_api.egg-info/dependency_links.txt
+manifest_api.egg-info/entry_points.txt
+manifest_api.egg-info/requires.txt
+manifest_api.egg-info/top_level.txt
