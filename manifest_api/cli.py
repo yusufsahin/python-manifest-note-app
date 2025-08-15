@@ -10,6 +10,10 @@ def main():
     p.add_argument("--reload", action="store_true")
     args = p.parse_args()
 
+    if not os.path.isfile(args.manifest):
+        print(f"Manifest file not found: {args.manifest}", file=sys.stderr)
+        sys.exit(1)
+
     app = create_app(args.manifest)
     uvicorn.run(app, host=args.host, port=args.port, reload=args.reload)
 
